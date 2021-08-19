@@ -6,7 +6,7 @@ This module currently supports Saving Nupkg from various feeds (remote and local
 
 ## Scheduling up a Backup
 
-The function `Invoke-LocalPowerShellGalleryUpdate` works to save desired PowerShell Modules and upload them to a local Proget Server. The command downloads modules based on a JSON document and the existing packages on in the repo. The JOSN document should be formated in the following way:  
+The function `Invoke-LocalPowerShellGalleryUpdate` works to save desired PowerShell Modules and upload them to a local Proget Server. The command downloads modules based on a JSON document and the existing packages on in the repo. The JSON document should be formated in the following way:  
 
 ```json
 [
