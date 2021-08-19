@@ -21,7 +21,7 @@ function Invoke-LocalPowerShellGalleryUpdate {
         [string]$ConfigFileURI,
         # API enpoint URI for the local package server
         [Parameter(ValueFromPipelineByPropertyName)]
-        [string]$FeedURI,
+        [uri]$FeedURI,
         # Token used for your local feed
         [Parameter()]
         [string]$FeedToken,
@@ -33,6 +33,7 @@ function Invoke-LocalPowerShellGalleryUpdate {
     $ErrorActionPreference = 'Stop'
     [Net.servicePointManager]::SecurityProtocol = [Net.servicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
     try {
+        $BaseURI = $FeedURI.AbsoluteURI.Replace($($FeedURI.AbsolutePath),'')
         if($ConfigFileURL){
             Write-Host "Download config from source"
             $Downloader = New-Object -TypeName System.Net.WebClient
@@ -41,8 +42,8 @@ function Invoke-LocalPowerShellGalleryUpdate {
         $DesiredPackages = Get-Content -raw $ConfigFile | ConvertFrom-Json
         Write-Host "Packages in Config:"
         Write-Host "$($DesiredPackages | Out-String)"
-        Write-Host "Get Current Cache of Packages"
-        $LocalPackages = Get-ProgetPackage -URI $FeedURI -APIToken $FeedToken -FeedID $FeedID
+        Write-Host "Get Current Cache of Packages from $BaseURI"
+        $LocalPackages = Get-ProgetPackage -URI $BaseURI -APIToken $FeedToken -FeedID $FeedID
         Write-Host "Figure out which packages we need"
         $NeededPackages = foreach ($p in $DesiredPackages){
             $CurrentPackageList = $LocalPackages | Where-Object { $_.Package_ID -eq $p.Package_ID }
@@ -65,7 +66,7 @@ function Invoke-LocalPowerShellGalleryUpdate {
         foreach ($n in $NeededPackages) {
             $SavedPackage = [environment]::GetEnvironmentVariable('TEMP'), "$($n.Package_ID).$($n.Version_Text).nupkg" -join [io.path]::DirectorySeparatorChar
             Save-Nupkg -URI "https://www.powershellgallery.com/api/v2/package/$($n.Package_ID)/$($n.Version_Text)" -Path $SavedPackage
-            nuget push "$SavedPackage" -apikey $FeedToken -source $FeedURI
+            nuget push "$SavedPackage" -apikey $FeedToken -source $FeedURI.AbsoluteURI
             Remove-Item -Path $SavedPackage -Confirm:$false -ErrorAction SilentlyContinue
         }
     } Catch {
