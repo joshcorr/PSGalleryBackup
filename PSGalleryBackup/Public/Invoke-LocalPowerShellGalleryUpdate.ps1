@@ -38,14 +38,14 @@ function Invoke-LocalPowerShellGalleryUpdate {
             $Downloader = New-Object -TypeName System.Net.WebClient
             $Downloader.DownloadFile("$ConfigFileURI", "$ConfigFile")
         }
-        $DesiredPacakges = $ConfigFile | ConvertFrom-Json
+        $DesiredPackages = $ConfigFile | ConvertFrom-Json
         Write-Host "Packages in Config:"
-        Write-Host "$($DesiredPacakges | Out-String)"
+        Write-Host "$($DesiredPackages | Out-String)"
         Write-Host "Get Current Cache of Packages"
-        $LocalPacakges = Get-ProgetPackage -URI $FeedURI -APIToken $FeedToken -FeedID $FeedID
+        $LocalPackages = Get-ProgetPackage -URI $FeedURI -APIToken $FeedToken -FeedID $FeedID
         Write-Host "Figure out which packages we need"
-        $NeededPackages = foreach ($p in $DesiredPacakges){
-            $CurrentPackageList = $LocalPacakges | Where-Object { $_.Package_ID -eq $p.Package_ID }
+        $NeededPackages = foreach ($p in $DesiredPackages){
+            $CurrentPackageList = $LocalPackages | Where-Object { $_.Package_ID -eq $p.Package_ID }
             if ($p.Version_Text -ne 'Latest') {
                 $RemotePackage = Find-Module -Name $p.Package_ID -Repository PSGallery -RequiredVersion $p.Version_Text -ErrorAction SilentlyContinue
             } else {
@@ -59,18 +59,18 @@ function Invoke-LocalPowerShellGalleryUpdate {
                 }
             }
         }
-        Write-Host "Pacakges Needed:"
+        Write-Host "Packages Needed:"
         Write-Host "$($NeededPackages | Out-String)"
         Write-Host "Attempt to Download from PowerShell Gallery and Upload to $FeedURI"
         foreach ($n in $NeededPackages) {
             $SavedPackage = [environment]::GetEnvironmentVariable('TEMP'), "$($n.Package_ID).$($n.Version_Text).nupkg" -join [io.path]::DirectorySeparatorChar
-            Save-Nupkg -URI "https://www.powershellgallery.com/api/v2/pacakge/$($n.Package_ID)/$($n.Version_Text)" -Path $SavedPackage
+            Save-Nupkg -URI "https://www.powershellgallery.com/api/v2/package/$($n.Package_ID)/$($n.Version_Text)" -Path $SavedPackage
             nuget push "$SavedPackage" -apikey $FeedToken -source $FeedURI
             Remove-Item -Path $SavedPackage -Confirm:$false -ErrorAction SilentlyContinue
         }
     } Catch {
         throw
     } finally {
-        $ConfigFile, $NeededPacakges, $RemotePackage, $LocalPacakges, $FeedToken, $FeedID, $FeedURI = $null
+        $ConfigFile, $NeededPackages, $RemotePackage, $LocalPackages, $FeedToken, $FeedID, $FeedURI = $null
     }
 }

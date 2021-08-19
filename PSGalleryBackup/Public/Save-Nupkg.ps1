@@ -1,11 +1,19 @@
 function Save-Nupkg {
     <#
     .SYNOPSIS
-        Saves a nupkg file from a feed
-    .Example
-        To Save a Module and then quickly extract it to a path. It will have some unecessary files in it.
+        Saves a nupkg file from a feed.
+    .EXAMPLE
         Save-Nupkg -URI 'https://www.powershellgallery.com/api/v2/package/dbatools/1.0.155' -Path 'C:\temp\dbatools.1.0.155.nupkg'
         Expand-Archive -Path 'C:\temp\dbatools.1.0.155.nupkg' -DestinationPath C:\Users\user\Documents\WindowsPowerShell\modules\
+
+        To Save a Module and then quickly extract it to a path. It will have some unecessary files in it.
+    .EXAMPLE
+        Save-Nupkg -URI 'https://www.powershellgallery.com/api/v2/package/dbatools/1.0.155' -Path 'C:\Backups\dbatools.1.0.155.nupkg'
+
+        Save a package for later use.
+    .NOTES
+        Packages that are downloaded from the PowerShell gallery can be found under the path.
+        https://www.powershellgallery.com/api/v2/package/<packageName>/<version>
     #>
     [cmdletbinding()]
     param (

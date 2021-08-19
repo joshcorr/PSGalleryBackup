@@ -1,20 +1,21 @@
 function Get-ProgetPackage {
     <#
     .SYNOPSIS
-        Pulls the latest version of pacakges in a Nuget feed
+        Pulls the latest version of packages in a Nuget feed
     .EXAMPLE
         Get-ProgetPackage -URI 'https://proget.example.com' -ApiToken <Native_API_Token> -FeedID <IDNUMBER>
     .EXAMPLE
         Get-ProgetPackage -URI 'https://proget.example.com' -ApiToken <Native_API_Token> -FeedID <IDNUMBER> -Latest
     .NOTES
         Requires that an appropriate API key for Native API be used.
+        You can find out the feed ID by clicking "manage feed" the id should be in the URL
     #>
     [cmdletbinding()]
     param(
         # URI for the proget server
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]$URI,
-        # Native API Token for accessing pacakge info
+        # Native API Token for accessing package info
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]$APIToken,
         # Int of the Feed ID that is being queried

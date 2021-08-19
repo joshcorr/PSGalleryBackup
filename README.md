@@ -2,7 +2,12 @@
 
 Functions to internalize PowerShell modules as nupgk packages into a self hosted nupkg repo (Proget, nexus, etc)  
 
-This module currently supports Saving Nupkg from various feeds (remote and local), Get a list of  current PowerShell packages hosted by a ProGet Feed, and Uploading desired pacakges to a ProGet  Feed. In the future we may support Nexus and other feed types.
+This module currently supports Saving Nupkg from various feeds (remote and local), Get a list of  current PowerShell packages hosted by a ProGet Feed, and Uploading desired packages to a ProGet  Feed. In the future we may support Nexus and other feed types.
+
+## Requirements
+
+- API Token for your internal repo (Proget requires a Native API token)
+- Nuget.exe on the system running Invoke-LocalPowerShellGalleryUpdate (if you intend to upload the package to an internal repo) [Install Nuget Client Tools](https://docs.microsoft.com/en-us/nuget/install-nuget-client-tools)
 
 ## Scheduling up a Backup
 
