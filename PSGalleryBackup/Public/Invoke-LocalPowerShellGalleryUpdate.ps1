@@ -38,7 +38,7 @@ function Invoke-LocalPowerShellGalleryUpdate {
             $Downloader = New-Object -TypeName System.Net.WebClient
             $Downloader.DownloadFile("$ConfigFileURI", "$ConfigFile")
         }
-        $DesiredPackages = $ConfigFile | ConvertFrom-Json
+        $DesiredPackages = Get-Content -raw $ConfigFile | ConvertFrom-Json
         Write-Host "Packages in Config:"
         Write-Host "$($DesiredPackages | Out-String)"
         Write-Host "Get Current Cache of Packages"
