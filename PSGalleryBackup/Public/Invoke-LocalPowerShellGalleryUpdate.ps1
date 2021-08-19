@@ -9,7 +9,7 @@ function Invoke-LocalPowerShellGalleryUpdate {
                 "Version_Text": "latest"
             }
         ]' | out-file C:\temp\Test.json
-        Invoke-LocalPowerShellGalleryUpdate -ConfigFile C:\Temp\test.json -FeedURI https://proget.example.com -FeedToken <someAPIKey> -FeedID 2
+        Invoke-LocalPowerShellGalleryUpdate -ConfigFile C:\Temp\test.json -FeedURI https://proget.example.com/nuget/powershellgallery-mirror -FeedToken <someAPIKey> -FeedID 2
     #>
     [cmdletbinding()]
     param(
@@ -19,7 +19,7 @@ function Invoke-LocalPowerShellGalleryUpdate {
         # URL where Config file is stored
         [Parameter()]
         [string]$ConfigFileURI,
-        # URI for the local package server
+        # API enpoint URI for the local package server
         [Parameter(ValueFromPipelineByPropertyName)]
         [string]$FeedURI,
         # Token used for your local feed
